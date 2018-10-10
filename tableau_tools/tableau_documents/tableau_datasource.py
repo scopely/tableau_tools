@@ -423,17 +423,16 @@ class TableauDatasource(TableauDocument):
         # Test to see if extract exists already
         e = self.xml.find(u'extract')
         if e is not None:
-            self.log(u"Existing extract found, no need to add")
-            raise AlreadyExistsException(u"An extract already exists, can't add a new one", u"")
+            self.log(u"Existing extract found, replacing")
+            self.xml.remove(e)
+
+        new_extract_filename_start = new_extract_filename.split(u".")[0]
+        if self.ds_version_type == u'10.5':
+            final_extract_filename = u"{}.hyper".format(new_extract_filename_start)
         else:
-            self.log(u'Extract doesnt exist')
-            new_extract_filename_start = new_extract_filename.split(u".")[0]
-            if self.ds_version_type == u'10.5':
-                final_extract_filename = u"{}.hyper".format(new_extract_filename_start)
-            else:
-                final_extract_filename = u"{}.tde".format(new_extract_filename_start)
-            self._extract_filename = final_extract_filename
-            self.log(u'Adding extract to the  data source')
+            final_extract_filename = u"{}.tde".format(new_extract_filename_start)
+        self._extract_filename = final_extract_filename
+        self.log(u'Adding extract to the  data source')
 
     def generate_extract_section(self):
         # Short circuit if no extract had been set

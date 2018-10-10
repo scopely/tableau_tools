@@ -468,7 +468,7 @@ class TableauDatasource(TableauDocument):
             c.set(u'authentication', u'auth-none')
             c.set(u'default-settings', u'yes')
             c.set(u'sslmode', u'')
-        c.set(u'dbname', u'Data/Datasources/{}'.format(self._extract_filename))
+        c.set(u'dbname', self._extract_filename)
         c.set(u'schema', u'Extract')
         c.set(u'tablename', u'Extract')
         right_now = datetime.datetime.now()

@@ -507,6 +507,14 @@ class TableauDatasource(TableauDocument):
             filters = self.generate_filters(self.extract_filters)
             for f in filters:
                 e.append(f)
+            
+        return e
+
+    def create_extract_file(self):
+        tde_columns = {}
+        self.log(u'Creating the extract filters')
+        if len(self.extract_filters) > 0:
+            filters = self.generate_filters(self.extract_filters)
             # Any column in the extract filters needs to exist in the TDE file itself
             if len(self.extract_filters) > 0:
                 for f in self.extract_filters:
@@ -546,7 +554,6 @@ class TableauDatasource(TableauDocument):
             extract_file_generator = TDEFileGenerator(self.logger)
         extract_file_generator.set_table_definition(tde_columns)
         extract_file_generator.create_extract(self.tde_filename)
-        return e
 
     #
     # Reading existing table relations

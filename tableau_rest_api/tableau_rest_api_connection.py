@@ -1120,7 +1120,7 @@ class TableauRestApiConnection(TableauBase):
             raise
 
     # Do not include file extension. Without filename, only returns the response
-    def download_datasource(self, ds_name_or_luid, filename_no_extension, proj_name_or_luid=None):
+    def download_datasource(self, ds_name_or_luid, filename_no_extension, proj_name_or_luid=None, include_extract=True):
         """"
         :type ds_name_or_luid: unicode
         :type filename_no_extension: unicode
@@ -1134,7 +1134,7 @@ class TableauRestApiConnection(TableauBase):
         else:
             ds_luid = self.query_datasource_luid(ds_name_or_luid, project_name_or_luid=proj_name_or_luid)
         try:
-            url = self.build_api_url(u"datasources/{}/content".format(ds_luid))
+            url = self.build_api_url(u"datasources/{}/content?includeExtract={}".format(ds_luid, include_extract))
             ds = self.send_binary_get_request(url)
             extension = None
             if self._last_response_content_type.find(u'application/xml') != -1:

@@ -445,7 +445,7 @@ class TableauDatasource(LoggingMethods, TableauDocument):
             c.set('authentication', 'auth-none')
             c.set('default-settings', 'yes')
             c.set('sslmode', '')
-        c.set('dbname', 'Data/Datasources/{}'.format(self._extract_filename))
+        c.set('dbname', self._extract_filename)
         c.set('schema', 'Extract')
         c.set('tablename', 'Extract')
         right_now = datetime.datetime.now()

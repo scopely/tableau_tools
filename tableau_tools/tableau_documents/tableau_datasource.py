@@ -445,7 +445,7 @@ class TableauDatasource(LoggingMethods, TableauDocument):
             c.set('authentication', 'auth-none')
             c.set('default-settings', 'yes')
             c.set('sslmode', '')
-        c.set('dbname', 'Data/Datasources/{}'.format(self._extract_filename))
+        c.set('dbname', self._extract_filename)
         c.set('schema', 'Extract')
         c.set('tablename', 'Extract')
         right_now = datetime.datetime.now()
@@ -483,6 +483,13 @@ class TableauDatasource(LoggingMethods, TableauDocument):
             filters = self.generate_filters(self.extract_filters)
             for f in filters:
                 e.append(f)
+        return e
+
+    def create_extract_file(self):
+        tde_columns = {}
+        self.log('Creating the extract filters')
+        if len(self.extract_filters) > 0:
+            filters = self.generate_filters(self.extract_filters)
             # Any column in the extract filters needs to exist in the TDE file itself
             if len(self.extract_filters) > 0:
                 for f in self.extract_filters:
@@ -521,9 +528,6 @@ class TableauDatasource(LoggingMethods, TableauDocument):
             extract_file_generator.create_extract(self.tde_filename)
         else:
             raise InvalidOptionException('tableau_tools 5.0 is Python 3.6+ compatible, but the TDE generating library is only available for Python 2.7. Please upgrade to a newer version of Tableau with Hyper extract engine (10.5+)')
-        return e
-
-
 
     def add_table_column(self, table_alias: str, table_field_name: str, tableau_field_alias: str):
         # Check to make sure the alias has been added

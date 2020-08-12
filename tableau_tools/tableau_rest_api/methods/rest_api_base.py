@@ -935,18 +935,18 @@ class TableauRestApiBase(LookupMethods, LoggingMethods, TableauRestXml):
     # Uploads a chunk to an already started session
     def append_to_file_upload(self, upload_session_id: str, content: bytes, filename: str):
         boundary_string = self.generate_boundary_string()
-        publish_request = bytes("--{}\r\n".format(boundary_string))
-        publish_request += bytes('Content-Disposition: name="request_payload"\r\n')
-        publish_request += bytes('Content-Type: text/xml\r\n\r\n')
-        publish_request += bytes('\r\n')
-        publish_request += bytes("--{}\r\n".format(boundary_string))
+        publish_request = bytes("--{}\r\n".format(boundary_string).encode('utf-8'))
+        publish_request += bytes('Content-Disposition: name="request_payload"\r\n'.encode('utf-8'))
+        publish_request += bytes('Content-Type: text/xml\r\n\r\n'.encode('utf-8'))
+        publish_request += bytes('\r\n'.encode('utf-8'))
+        publish_request += bytes("--{}\r\n".format(boundary_string).encode('utf-8'))
         publish_request += bytes('Content-Disposition: name="tableau_file"; filename="{}"\r\n'.format(
-            filename))
-        publish_request += bytes('Content-Type: application/octet-stream\r\n\r\n')
+            filename).encode('utf-8'))
+        publish_request += bytes('Content-Type: application/octet-stream\r\n\r\n'.encode('utf-8'))
 
         publish_request += content
 
-        publish_request += "\r\n--{}--".format(boundary_string)
+        publish_request += bytes("\r\n--{}--".format(boundary_string).encode('utf-8'))
         url = self.build_api_url("fileUploads/{}".format(upload_session_id))
         self.send_append_request(url=url, content=publish_request, boundary_string=boundary_string)
 
